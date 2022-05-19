@@ -1,0 +1,19 @@
+iter = 5000
+loss_avg = 3.4451
+duration = 1m 27s
+
+iter = 10000
+loss_avg = 2.6111
+duration = 2m 59s
+
+iter = 25000
+loss_avg = 1.3333
+duration = 7m 7s
+
+iter = 50000
+loss_avg = 0.5103
+duration = 14m 26s
+
+iter = 100000
+loss_avg = 0.1457
+duration = 29m 1s

@@ -1,0 +1,81 @@
+===== INFER: GREEDY =====
+> nous quittons le japon le mois prochain .
+= we are leaving japan next month .
+< we re getting next next next next . <EOS>
+
+> je suis habituee a travailler toute la nuit .
+= i m used to working all night .
+< i m used of working . <EOS>
+
+> ce n est pas toi qui dirige .
+= you re not in charge .
+< he re not the one who can . <EOS>
+
+> je ne suis pas magicien .
+= i m not a magician .
+< i m not a . <EOS>
+
+> je vais etre a l exterieur aujourd hui .
+= i m going to be out today .
+< i m going to be today to be today . <EOS>
+
+> je suis desolee si je t ai effraye .
+= i m sorry if i frightened you .
+< i m sorry if i frightened . <EOS>
+
+> il a tres peur des chiens .
+= he is very afraid of dogs .
+< he s afraid of dogs . <EOS>
+
+> nous sommes desormais pour ainsi dire morts .
+= we re as good as dead now .
+< we re faced as that . <EOS>
+
+> je ne suis pas ton ennemie .
+= i am not your enemy .
+< i am not your enemy . <EOS>
+
+> je suis japonais .
+= i am a japanese .
+< i am japanese . <EOS>
+
+===== INFER: BEAM =====
+> nous quittons le japon le mois prochain .
+= we are leaving japan next month .
+< we re getting next next next next next . . . . . . <EOS>
+
+> je suis habituee a travailler toute la nuit .
+= i m used to working all night .
+< i m used of working all all . . . . . . . .
+
+> ce n est pas toi qui dirige .
+= you re not in charge .
+< he re not the one who trained you . . . . . . <EOS>
+
+> je ne suis pas magicien .
+= i m not a magician .
+< i m not a . . . <EOS>
+
+> je vais etre a l exterieur aujourd hui .
+= i m going to be out today .
+< i m going to be today today today . . <EOS>
+
+> je suis desolee si je t ai effraye .
+= i m sorry if i frightened you .
+< i m sorry if i frightened you . . . . . <EOS>
+
+> il a tres peur des chiens .
+= he is very afraid of dogs .
+< he s afraid of afraid of dogs of . . . . . . <EOS>
+
+> nous sommes desormais pour ainsi dire morts .
+= we re as good as dead now .
+< we are about as as as . . . . . . . . <EOS>
+
+> je ne suis pas ton ennemie .
+= i am not your enemy .
+< i am not your enemy . . . <EOS>
+
+> je suis japonais .
+= i am a japanese .
+< i am japanese . . . <EOS>

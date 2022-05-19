@@ -1,0 +1,87 @@
+            class BeamNode:
+                def __init__(self, log_softmax, decoder_input, parent, decoder_attention):
+                    self.log_softmax = log_softmax
+                    self.decoder_input = decoder_input
+                    self.parent = parent
+                    self.decoder_attention = decoder_attention
+
+                    if self.parent:
+                        self.depth = self.parent.depth + 1
+                        self.sum_log = self.parent.sum_log + self.log_softmax
+                    else:
+                        self.depth = 0
+                        self.sum_log = 0
+
+                def weight(self, weight_type):
+                    if weight_type == 1: 
+                        return self.sum_log
+                    elif weight_type == 2:
+                        return self.sum_log / (self.depth + 1)
+                    elif weight_type == 3:
+                        alpha = 1
+                        denom = (5 + self.depth)**alpha / (5 + 1)**alpha
+                        return self.sum_log / denom
+
+                def __lt__(self, other):
+                    return self.weight(2) < other.weight(2)
+
+                def __repr__(self):
+                    return f"{np.float64(self.weight(2))}"
+          # ================================================================================
+            n = beam_width
+            queue = []
+            answers = []
+            
+            root = BeamNode(None, decoder_input, None, None)
+            queue.append(root)
+
+            current_depth = root.depth
+            cr_node = root
+            ctr = -1
+            while queue != []:
+                """
+                    When all node in one depth have been processed,
+                    trim the node saved. Pick n highest only.
+                """
+                if (ctr - 1) % n == 0:
+                    current_depth += 1
+                    queue = sorted(queue, reverse=True)[:n]
+                
+                cr_node = queue.pop(0)
+                ctr += 1
+
+                if cr_node.depth < max_length and cr_node.decoder_input.item() != EOS_token:
+                    decoder_output, decoder_hidden, decoder_attention = decoder(
+                        cr_node.decoder_input, decoder_hidden, encoder_outputs)
+
+                    # select n best
+                    topv, topi = decoder_output.topk(n)
+                    if n == 1:
+                        decoder_inputs = topi.squeeze().detach()
+                        queue.append(BeamNode(topv, decoder_inputs, cr_node, decoder_attention.data))
+                    else:
+                        decoder_inputs = topi[0].squeeze().detach()
+                        for i in range(n):
+                            """
+                                Only consider n highest each node because maximum node 
+                                that can be taken is n. Rest is not needed.
+                            """
+                            queue.append(BeamNode(topv[0][i], decoder_inputs[i], cr_node, decoder_attention.data))
+                else:
+                    cr_node.give_eos_penalty(input_length)
+                    answers.append(cr_node)
+            
+            # ans = sorted(answers)
+            # for a in ans:
+            #     sentences = []
+            #     while a.parent != None:
+            #         sentences.insert(0, output_lang.index2word[a.decoder_input.item()])
+            #         a = a.parent
+            #     print(" ".join(sentences))
+
+            ans = max(answers)
+            di = ans.depth - 1
+            while ans.parent != None:
+                decoded_words.insert(0, output_lang.index2word[ans.decoder_input.item()])
+                decoder_attentions[ans.depth - 1] = ans.decoder_attention
+                ans = ans.parent

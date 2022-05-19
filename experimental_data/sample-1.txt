@@ -1,0 +1,83 @@
+GREEDY - 25000 ITER
+==== INFER: GREEDY ====
+> nous quittons le japon le mois prochain .
+= we are leaving japan next month .
+< we are next next next next next . <EOS>
+
+> je suis habituee a travailler toute la nuit .
+= i m used to working all night .
+< i m used to staying all the . <EOS>
+
+> ce n est pas toi qui dirige .
+= you re not in charge .
+< you re not supposed to be . . <EOS>
+
+> je ne suis pas magicien .
+= i m not a magician .
+< i am not a . . <EOS>
+
+> je vais etre a l exterieur aujourd hui .
+= i m going to be out today .
+< i m going to be today today today today today . <EOS>
+
+> je suis desolee si je t ai effraye .
+= i m sorry if i frightened you .
+< i m sorry if i frightened you . <EOS>
+
+> il a tres peur des chiens .
+= he is very afraid of dogs .
+< he s very of of dogs . <EOS>
+
+> nous sommes desormais pour ainsi dire morts .
+= we re as good as dead now .
+< we re as good as as as . <EOS>
+
+> je ne suis pas ton ennemie .
+= i am not your enemy .
+< i am not your enemy . <EOS>
+
+> je suis japonais .
+= i am a japanese .
+< i am japanese . <EOS>
+
+
+==== INFER: BEAM =====
+> nous quittons le japon le mois prochain .
+= we are leaving japan next month .
+< she s next next . . . <EOS>
+
+> je suis habituee a travailler toute la nuit .
+= i m used to working all night .
+< i m used here . . . <EOS>
+
+> ce n est pas toi qui dirige .
+= you re not in charge .
+< you re to . <EOS>
+
+> je ne suis pas magicien .
+= i m not a magician .
+< i am . <EOS>
+
+> je vais etre a l exterieur aujourd hui .
+= i m going to be out today .
+< i m going today today . today . <EOS>
+
+> je suis desolee si je t ai effraye .
+= i m sorry if i frightened you .
+< i m if you . . . <EOS>
+
+> il a tres peur des chiens .
+= he is very afraid of dogs .
+< he s of . . . <EOS>
+
+> nous sommes desormais pour ainsi dire morts .
+= we re as good as dead now .
+< we re now now . now . <EOS>
+
+> je ne suis pas ton ennemie .
+= i am not your enemy .
+< i am not your . . <EOS>
+
+> je suis japonais .
+= i am a japanese .
+< i am . . <EOS>

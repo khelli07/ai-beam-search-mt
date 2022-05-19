@@ -1,0 +1,71 @@
+            class BeamNode:
+                def __init__(self, log_softmax, decoder_input, parent, decoder_attention):
+                    self.log_softmax = log_softmax
+                    self.decoder_input = decoder_input
+                    self.parent = parent
+                    self.decoder_attention = decoder_attention
+
+                    if self.parent:
+                        self.depth = self.parent.depth + 1
+                        self.sum_log = self.parent.sum_log + self.log_softmax
+                    else:
+                        self.depth = 0
+                        self.sum_log = 0
+
+                def weight(self):
+                    return self.sum_log / (self.depth + 1)
+
+                def give_eos_penalty(self, input_length):
+                    ratio = input_length/self.depth
+                    if ratio > 1.25:
+                        mul = np.random.uniform(7.5, 9)
+                    else:
+                        mul = np.random.uniform(5, 6.5)
+                    self.sum_log -= ratio * mul
+
+                def __lt__(self, other):
+                    return self.weight() < other.weight()
+
+                def __repr__(self):
+                    return f"{np.float64(self.weight())}"
+          # ================================================================================
+            n = beam_width
+            parents = []; children = []
+            answers = []
+            
+            root = BeamNode(None, decoder_input, None, None)
+            parents.append(root)
+            while parents != []:
+                # Process all parents
+                for node in parents:
+                    if node.depth < max_length and node.decoder_input.item() != EOS_token:
+                        decoder_output, decoder_hidden, decoder_attention = decoder(
+                            node.decoder_input, decoder_hidden, encoder_outputs)
+
+                        # select n best for each node
+                        topv, topi = decoder_output.topk(n)
+                        if n == 1:
+                            decoder_inputs = topi.squeeze().detach()
+                            children.append(BeamNode(topv, decoder_inputs, node, decoder_attention.data))
+                        else:
+                            decoder_inputs = topi[0].squeeze().detach()
+                            print(node.decoder_input)
+                            print(topv)
+                            print(decoder_inputs)
+                            for i in range(n):
+                                children.append(BeamNode(topv[0][i], decoder_inputs[i], node, decoder_attention.data))
+                    else:
+                        node.give_eos_penalty(input_length)
+                        answers.append(node)
+                
+                # filter all childrens
+                parents = sorted(children, reverse=True)[:n]
+                children = []
+
+            
+            ans = max(answers)
+            di = ans.depth - 1
+            while ans.parent != None:
+                decoded_words.insert(0, output_lang.index2word[ans.decoder_input.item()])
+                decoder_attentions[ans.depth - 1] = ans.decoder_attention
+                ans = ans.parent
